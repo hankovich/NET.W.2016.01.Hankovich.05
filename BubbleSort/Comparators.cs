@@ -14,7 +14,7 @@ namespace BubbleSort
                 throw new ArgumentException($"{nameof(x)} must be not null and not empty");
             if (y == null || y.Length == 0)
                 throw new ArgumentException($"{nameof(y)} must be not null and not empty");
-
+            
             if (x.Sum() > y.Sum())
                 return 1;
             if (x.Sum() < y.Sum())

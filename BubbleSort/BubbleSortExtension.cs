@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace BubbleSort
 {
+    public enum SortComparators
+    {
+        LineSum,
+        LineMax,
+        LineMin
+    }
+
     public static class BubbleSortExtension
     {
-        public enum SortComparators
-        {
-            StringSum,
-            StringMax,
-            StringMin
-        }
-
         /// <summary>
         /// Bubble sorting of jagged int array
         /// </summary>
@@ -27,7 +27,7 @@ namespace BubbleSort
         /// 3. at least one of the array's strings is null
         /// 4. at least one of the array's strings is empty
         /// </exception>
-        public static void BubbleSort(this int[][] array, SortComparators comparator = SortComparators.StringSum, bool byIncrease = true)
+        public static void BubbleSort(this int[][] array, SortComparators comparator = SortComparators.LineSum, bool byIncrease = true)
         {
             if (array == null || array.Length == 0)
                 throw new ArgumentException($"{nameof(array)} must be not null and not empty");
@@ -37,13 +37,13 @@ namespace BubbleSort
             Comparer<int[]> comparer = null;
             switch (comparator)
             {
-                case SortComparators.StringSum:
+                case SortComparators.LineSum:
                     comparer = new CompareSum();
                     break;
-                case SortComparators.StringMax:
+                case SortComparators.LineMax:
                     comparer = new CompareMax();
                     break;
-                case SortComparators.StringMin:
+                case SortComparators.LineMin:
                     comparer = new CompareMin();
                     break;
                 default:
@@ -51,11 +51,11 @@ namespace BubbleSort
                     break;
             }
 
-            bool isChanged = false;
+            bool isChanged = true;
 
             for (int i = 0; i < array.Length - 1; i++)
             {
-                isChanged = false;
+                //isChanged = false;
                 for (int j = 0; j < array.Length - i - 1; j++)
                 {
                     if (comparer.Compare(array[j], array[j + 1]) == expectedComparationResult)
