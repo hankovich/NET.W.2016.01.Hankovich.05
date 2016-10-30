@@ -11,7 +11,7 @@ namespace GreatestCommonDivisor.Tests
 { 
     [TestFixture]
     public class GreatestCommonDivisorTests
-    {
+    { 
         [TestCase(null, 0, 0)]
         [TestCase(null, null, 10)]
         [TestCase(null, 10, null)]

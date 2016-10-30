@@ -10,9 +10,12 @@ namespace GreatestCommonDivisor
 {
     public static class GreatestCommonDivisor
     {
+        #region EuclideanAlgorithm
+        
         /// <summary>
         /// Find greatest common divisor with help of Euclidean Method
         /// </summary>
+        /// <param name="ts">Out variable for time</param>
         /// <param name="a">First operand</param>
         /// <param name="b">Second operand</param>
         /// <exception cref="ArgumentException">If at least one of the operands is equal int.MinValue</exception>
@@ -42,6 +45,7 @@ namespace GreatestCommonDivisor
         /// <summary>
         /// Find greatest common divisor with help of Euclidean Method
         /// </summary>
+        /// <param name="ts">Out variable for time</param>
         /// <param name="a">First operand</param>
         /// <param name="b">Second operand</param>
         /// <param name="c">Third operand</param>
@@ -67,6 +71,7 @@ namespace GreatestCommonDivisor
         /// <summary>
         /// Find greatest common divisor with help of Euclidean Method
         /// </summary>
+        /// <param name="ts">Out variable for time</param>
         /// <param name="arrayValue"></param>
         /// <exception cref="ArgumentException">
         /// 1. If at least one of the operands is equal int.MinValue
@@ -78,33 +83,20 @@ namespace GreatestCommonDivisor
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
             TimeSpan temp;
-
-            if (arrayValue == null)
-                throw new ArgumentException($"{nameof(arrayValue)} must be not null");
-            if (arrayValue.Length < 2)
-                throw new ArgumentException($"{nameof(arrayValue)} must contain at least two arguements");
-
-            int? tempValue = EuclideanAlgorithm(out temp, arrayValue[0], arrayValue[1]);
-
-            for (int i = 2; i < arrayValue.Length; i++)
-            {
-                if (tempValue == null)
-                {
-                    stopWatch.Stop();
-                    ts = stopWatch.Elapsed;
-                    return tempValue;
-                }
-                tempValue = EuclideanAlgorithm(out temp, tempValue, arrayValue[i]);
-            }
-
+            int? tempValue = Induction(out temp, true, arrayValue);
             stopWatch.Stop();
             ts = stopWatch.Elapsed;
             return tempValue;
         }
 
+        #endregion
+
+        #region BinaryAlgorithm
+
         /// <summary>
         /// Find greatest common divisor with help of Binary Method
         /// </summary>
+        /// <param name="ts">Out variable for time</param>
         /// <param name="a">First operand</param>
         /// <param name="b">Second operand</param>
         /// <exception cref="ArgumentException">If at least one of the operands is equal int.MinValue</exception>
@@ -171,6 +163,7 @@ namespace GreatestCommonDivisor
         /// <summary>
         /// Find greatest common divisor with help of Binary Method
         /// </summary>
+        /// <param name="ts">Out variable for time</param>
         /// <param name="a">First operand</param>
         /// <param name="b">Second operand</param>
         /// <param name="c">Third operand</param>
@@ -193,6 +186,7 @@ namespace GreatestCommonDivisor
         /// <summary>
         /// Find greatest common divisor with help of Binary Method
         /// </summary>
+        /// <param name="ts">Out variable for time</param>
         /// <param name="arrayValue"></param>
         /// <exception cref="ArgumentException">
         /// 1. If at least one of the operands is equal int.MinValue
@@ -204,30 +198,16 @@ namespace GreatestCommonDivisor
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
             TimeSpan temp;
-
-            if (arrayValue == null)
-                throw new ArgumentException($"{nameof(arrayValue)} must be not null");
-            if (arrayValue.Length < 2)
-                throw new ArgumentException($"{nameof(arrayValue)} must contain at least two arguements");
-
-            int? tempValue = BinaryAlgorithm(out temp, arrayValue[0], arrayValue[1]);
-
-            for (int i = 2; i < arrayValue.Length; i++)
-            {
-                if (tempValue == null)
-                {
-                    stopWatch.Stop();
-                    ts = stopWatch.Elapsed;
-                    return tempValue;
-                }
-                tempValue = BinaryAlgorithm(out temp, tempValue, arrayValue[i]);
-            }
-
+            int? tempValue = Induction(out temp, false, arrayValue);
             stopWatch.Stop();
             ts = stopWatch.Elapsed;
             return tempValue;
         }
 
+        #endregion
+
+        #region private methods
+        
         /// <summary>
         /// Find absolute value for int?. Value must inhare (int.MinValue, int.MaxValue]
         /// </summary>
@@ -240,5 +220,36 @@ namespace GreatestCommonDivisor
                 throw new ArgumentException($"{nameof(value)} must be greater than int.MinValue");
             return (value >= 0) ? value : -value;
         }
+
+
+        private static int? Induction(out TimeSpan ts, bool euclidean, params int?[] arrayValue)
+        {
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
+            TimeSpan temp;
+
+            if (arrayValue == null)
+                throw new ArgumentException($"{nameof(arrayValue)} must be not null");
+            if (arrayValue.Length < 2)
+                throw new ArgumentException($"{nameof(arrayValue)} must contain at least two arguements");
+
+            int? tempValue = euclidean ? EuclideanAlgorithm(out temp, arrayValue[0], arrayValue[1]) : BinaryAlgorithm(out temp, arrayValue[0], arrayValue[1]);
+
+            for (int i = 2; i < arrayValue.Length; i++)
+            {
+                if (tempValue == null)
+                {
+                    stopWatch.Stop();
+                    ts = stopWatch.Elapsed;
+                    return tempValue;
+                }
+                tempValue = euclidean ? EuclideanAlgorithm(out temp, tempValue, arrayValue[i]) : BinaryAlgorithm(out temp, tempValue, arrayValue[i]);
+            }
+
+            stopWatch.Stop();
+            ts = stopWatch.Elapsed;
+            return tempValue;
+        }
+        #endregion
     }
 }
