@@ -8,7 +8,7 @@ using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 
 namespace GreatestCommonDivisor.Tests
-{
+{ 
     [TestFixture]
     public class GreatestCommonDivisorTests
     {
