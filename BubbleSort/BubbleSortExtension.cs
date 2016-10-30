@@ -55,7 +55,7 @@ namespace BubbleSort
 
             for (int i = 0; i < array.Length - 1; i++)
             {
-                //isChanged = false;
+                isChanged = false;
                 for (int j = 0; j < array.Length - i - 1; j++)
                 {
                     if (comparer.Compare(array[j], array[j + 1]) == expectedComparationResult)
