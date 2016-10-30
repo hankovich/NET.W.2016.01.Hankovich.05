@@ -42,29 +42,6 @@ namespace GreatestCommonDivisor
             return a;
         }
 
-        /// <summary>
-        /// Find greatest common divisor with help of Euclidean Method
-        /// </summary>
-        /// <param name="ts">Out variable for time</param>
-        /// <param name="a">First operand</param>
-        /// <param name="b">Second operand</param>
-        /// <param name="c">Third operand</param>
-        /// <exception cref="ArgumentException">If at least one of the operands is equal int.MinValue</exception>
-        /// <returns>Greatest common divisor or null if GCD is undefined</returns>
-        public static int? EuclideanAlgorithm(out TimeSpan ts, int? a, int? b, int? c)
-        {
-            Stopwatch stopWatch = new Stopwatch();
-            stopWatch.Start();
-            TimeSpan temp;
-
-            int? result = EuclideanAlgorithm(out temp, EuclideanAlgorithm(out temp, a, b), c);
-
-            stopWatch.Stop();
-            ts = stopWatch.Elapsed;
-            return result;
-        }
-
-
         //public static int? EuclideanAlgorithm(int? a, int? b, int? c, int? d, int? e, int? f, int? g, int? h, int? i, int? j, int? k, int? l, int? m, int? n, int? o, int? p, int? q, int? r, int? s, int? t, int? u, int? v, int? w, int? x, int? y, int? z)
         //just a joke
 
@@ -164,29 +141,6 @@ namespace GreatestCommonDivisor
         /// Find greatest common divisor with help of Binary Method
         /// </summary>
         /// <param name="ts">Out variable for time</param>
-        /// <param name="a">First operand</param>
-        /// <param name="b">Second operand</param>
-        /// <param name="c">Third operand</param>
-        /// <exception cref="ArgumentException">If at least one of the operands is equal int.MinValue</exception>
-        /// <returns>Greatest common divisor or null if GCD is undefined</returns>
-        public static int? BinaryAlgorithm(out TimeSpan ts, int? a, int? b, int? c)
-        {
-            Stopwatch stopWatch = new Stopwatch();
-            stopWatch.Start();
-            TimeSpan temp;
-
-            int? result = BinaryAlgorithm(out temp, BinaryAlgorithm(out temp, a, b), c);
-
-            stopWatch.Stop();
-            ts = stopWatch.Elapsed;
-
-            return result;
-        }
-
-        /// <summary>
-        /// Find greatest common divisor with help of Binary Method
-        /// </summary>
-        /// <param name="ts">Out variable for time</param>
         /// <param name="arrayValue"></param>
         /// <exception cref="ArgumentException">
         /// 1. If at least one of the operands is equal int.MinValue
@@ -233,9 +187,16 @@ namespace GreatestCommonDivisor
             if (arrayValue.Length < 2)
                 throw new ArgumentException($"{nameof(arrayValue)} must contain at least two arguements");
 
-            int? tempValue = euclidean ? EuclideanAlgorithm(out temp, arrayValue[0], arrayValue[1]) : BinaryAlgorithm(out temp, arrayValue[0], arrayValue[1]);
+            int?[] array = arrayValue.Distinct().ToArray();
 
-            for (int i = 2; i < arrayValue.Length; i++)
+            if (array.Length == 1)
+            {
+                Array.Resize(ref array, array.Length + 1);
+                array[array.Length - 1] = 0;
+            }
+
+            int? tempValue = euclidean ? EuclideanAlgorithm(out temp, array[0], array[1]) : BinaryAlgorithm(out temp, array[0], array[1]);
+            for (int i = 2; i < array.Length; i++)
             {
                 if (tempValue == null)
                 {
@@ -243,7 +204,7 @@ namespace GreatestCommonDivisor
                     ts = stopWatch.Elapsed;
                     return tempValue;
                 }
-                tempValue = euclidean ? EuclideanAlgorithm(out temp, tempValue, arrayValue[i]) : BinaryAlgorithm(out temp, tempValue, arrayValue[i]);
+                tempValue = euclidean ? EuclideanAlgorithm(out temp, tempValue, array[i]) : BinaryAlgorithm(out temp, tempValue, array[i]);
             }
 
             stopWatch.Stop();

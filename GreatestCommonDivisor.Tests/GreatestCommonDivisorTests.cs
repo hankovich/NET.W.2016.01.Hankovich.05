@@ -34,6 +34,7 @@ namespace GreatestCommonDivisor.Tests
         [TestCase(null, null, null, int.MaxValue)]
         [TestCase(5, -5, 5, 10)]
         [TestCase(2, int.MinValue + 2, 2, int.MaxValue - 1)]
+        [TestCase(20, 0, 0, 20)]
         [Test]
         public void EuclideanAlgorithm_abc_gcdReturn(int? expected, int? a, int? b, int? c)
         {
