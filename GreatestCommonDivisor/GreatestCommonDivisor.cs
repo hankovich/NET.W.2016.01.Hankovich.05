@@ -5,6 +5,8 @@ namespace GreatestCommonDivisor
 {
     public static class GreatestCommonDivisor
     {
+        private delegate int DelegateGcd(int a, int b);
+
         #region EuclideanAlgorithm
 
         /// <summary>
@@ -65,7 +67,7 @@ namespace GreatestCommonDivisor
         {
             Stopwatch watch = Stopwatch.StartNew();
 
-            int tempValue = Induction(true, arrayValue);
+            int tempValue = Induction(EuclideanAlgorithmHelper, arrayValue);
 
             watch.Stop();
             ts = watch.Elapsed;
@@ -132,7 +134,7 @@ namespace GreatestCommonDivisor
         {
             Stopwatch watch = Stopwatch.StartNew();
 
-            int tempValue = Induction(false, arrayValue);
+            int tempValue = Induction(BinaryAlgorithmHelper, arrayValue);
 
             watch.Stop();
             ts = watch.Elapsed;
@@ -144,25 +146,21 @@ namespace GreatestCommonDivisor
 
         #region private methods
 
-        private static int Induction(bool euclidean, params int[] arrayValue)
+        private static int Induction(DelegateGcd gdc, params int[] arrayValue)
         {
             if (arrayValue == null)
                 throw new ArgumentException($"{nameof(arrayValue)} must be not null");
             if (arrayValue.Length < 2)
                 throw new ArgumentException($"{nameof(arrayValue)} must contain at least two arguements");
 
-            int tempValue = euclidean
-                ? EuclideanAlgorithmHelper(arrayValue[0], arrayValue[1])
-                : BinaryAlgorithmHelper(arrayValue[0], arrayValue[1]);
+            int tempValue = gdc(arrayValue[0], arrayValue[1]);
             for (int i = 2; i < arrayValue.Length; i++)
             {
                 if (tempValue == 1)
                 {
                     return tempValue;
                 }
-                tempValue = euclidean
-                    ? EuclideanAlgorithmHelper(tempValue, arrayValue[i])
-                    : BinaryAlgorithmHelper(tempValue, arrayValue[i]);
+                tempValue = gdc(tempValue, arrayValue[i]);
             }
 
             return tempValue;
